@@ -56,7 +56,7 @@ describe('# Settings Page', () => {
 
   it('should submit new settings when submit form', async () => {
     vi.spyOn(router, 'push')
-    server.use(['PUT', '/api/user', { user: { ...fixtures.user, username: 'new username' } }])
+    server.use(['PUT', '/user', { user: { ...fixtures.user, username: 'new username' } }])
     const { getByRole, getByPlaceholderText } = render(Settings, await renderOptions({
       router,
       initialState: { user: { user: fixtures.user } },
@@ -67,7 +67,7 @@ describe('# Settings Page', () => {
     await fireEvent.update(getByPlaceholderText('New password'), 'new password')
     await fireEvent.click(getByRole('button', { name: 'Update Settings' }))
 
-    const mockedRequest = await server.waitForRequest('PUT', '/api/user')
+    const mockedRequest = await server.waitForRequest('PUT', '/user')
     expect(router.push).toHaveBeenCalledWith({ name: 'profile', params: { username: 'new username' } })
     expect(await mockedRequest.json()).toMatchInlineSnapshot(`
       {
@@ -83,7 +83,7 @@ describe('# Settings Page', () => {
   })
 
   it('should display error message when api returned some errors', async () => {
-    server.use(['PUT', '/api/user', 400, { errors: { username: ['has already been taken'] } }])
+    server.use(['PUT', '/user', 400, { errors: { username: ['has already been taken'] } }])
     const { getByRole, getByPlaceholderText, getByText } = render(Settings, renderOptions({
       initialState: { user: { user: fixtures.user } },
     }))

@@ -6,13 +6,13 @@ import ArticlesList from './ArticlesList.vue'
 
 describe('# ArticlesList', () => {
   const server = setupMockServer(
-    ['GET', '/api/articles*', { articles: [fixtures.article], articlesCount: 1 }],
+    ['GET', '/articles*', { articles: [fixtures.article], articlesCount: 1 }],
   )
 
   it('should render correctly', async () => {
     const { container } = render(asyncWrapper(ArticlesList), renderOptions())
 
-    await server.waitForRequest('GET', '/api/articles*')
+    await server.waitForRequest('GET', '/articles*')
 
     expect(container).toHaveTextContent(fixtures.article.title)
     expect(container).toHaveTextContent('Article description')

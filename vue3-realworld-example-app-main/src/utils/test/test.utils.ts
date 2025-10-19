@@ -130,17 +130,17 @@ type Listener =
  *
  * @example
  * const server = setupMockServer(
- *   ['/api/articles/markdown', { article }],
- *   ['/api/articles/markdown', 200, { article }],
- *   ['GET', '/api/articles/markdown', { article }],
- *   ['GET', '/api/articles/markdown', 200, { article }],
- *   ['DELETE', '/api/articles/comment'],
- *   ['DELETE', '/api/articles/comment', 204]
+ *   ['/articles/markdown', { article }],
+ *   ['/articles/markdown', 200, { article }],
+ *   ['GET', '/articles/markdown', { article }],
+ *   ['GET', '/articles/markdown', 200, { article }],
+ *   ['DELETE', '/articles/comment'],
+ *   ['DELETE', '/articles/comment', 204]
  * )
  *
  * it('...', async () => {
- *   await server.waitForRequest('/api/articles/markdown')
- *   await server.waitForRequest('GET', '/api/articles/markdown')
+ *   await server.waitForRequest('/articles/markdown')
+ *   await server.waitForRequest('GET', '/articles/markdown')
  * })
  */
 

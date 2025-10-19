@@ -10,7 +10,7 @@ describe('# EditArticle page', () => {
   const server = setupMockServer()
 
   it('should call create api when fill form and click submit button', async () => {
-    server.use(['POST', '/api/articles', { article: { ...fixtures.article, slug: 'article-title' } }])
+    server.use(['POST', '/articles', { article: { ...fixtures.article, slug: 'article-title' } }])
     vi.spyOn(router, 'push')
     const { getByRole, getByPlaceholderText } = render(EditArticle, await renderOptions({
       router,
@@ -24,7 +24,7 @@ describe('# EditArticle page', () => {
 
     await fireEvent.click(getByRole('button', { name: 'Publish Article' }))
 
-    const mockedRequest = await server.waitForRequest('POST', '/api/articles')
+    const mockedRequest = await server.waitForRequest('POST', '/articles')
 
     expect(router.push).toHaveBeenCalledWith({ name: 'article', params: { slug: 'article-title' } })
     expect(await mockedRequest.json()).toMatchInlineSnapshot(`
@@ -44,21 +44,21 @@ describe('# EditArticle page', () => {
 
   it('should call update api when click submit button and in editing', async () => {
     server.use(
-      ['GET', '/api/articles/*', { article: fixtures.article }],
-      ['PUT', '/api/articles/*', { article: fixtures.article }],
+      ['GET', '/articles/*', { article: fixtures.article }],
+      ['PUT', '/articles/*', { article: fixtures.article }],
     )
     vi.spyOn(router, 'push')
     const { getByRole, getByPlaceholderText } = render(EditArticle, await renderOptions({
       router,
       initialRoute: { name: 'article', params: { slug: 'article-foo' } },
     }))
-    await server.waitForRequest('GET', '/api/articles/*')
+    await server.waitForRequest('GET', '/articles/*')
 
     await userEvent.type(getByPlaceholderText('Enter tags'), 'tag1{Enter}tag2{Enter}')
 
     await fireEvent.click(getByRole('button', { name: 'Publish Article' }))
 
-    const mockedRequest = await server.waitForRequest('PUT', '/api/articles/article-foo')
+    const mockedRequest = await server.waitForRequest('PUT', '/articles/article-foo')
 
     expect(router.push).toHaveBeenCalledWith({ name: 'article', params: { slug: 'article-foo' } })
     expect(await mockedRequest.json()).toMatchInlineSnapshot(`
@@ -81,21 +81,21 @@ describe('# EditArticle page', () => {
 
   it('should can remove tag when lick remove tag button', async () => {
     server.use(
-      ['GET', '/api/articles/*', { article: fixtures.article }],
-      ['PUT', '/api/articles/*', { article: fixtures.article }],
+      ['GET', '/articles/*', { article: fixtures.article }],
+      ['PUT', '/articles/*', { article: fixtures.article }],
     )
     const { getByRole, getByPlaceholderText } = render(EditArticle, await renderOptions({
       router,
       initialRoute: { name: 'article', params: { slug: 'article-foo' } },
     }))
-    await server.waitForRequest('GET', '/api/articles/*')
+    await server.waitForRequest('GET', '/articles/*')
 
     await userEvent.type(getByPlaceholderText('Enter tags'), 'tag1{Enter}tag2{Enter}')
     await userEvent.click(getByRole('button', { name: 'Delete tag: tag1' }))
 
     await fireEvent.click(getByRole('button', { name: 'Publish Article' }))
 
-    const mockedRequest = await server.waitForRequest('PUT', '/api/articles/article-foo')
+    const mockedRequest = await server.waitForRequest('PUT', '/articles/article-foo')
 
     expect(await mockedRequest.json()).toMatchInlineSnapshot(`
       {

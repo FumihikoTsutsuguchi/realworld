@@ -8,7 +8,7 @@ describe('# Register form', () => {
 
   it('should call register api when fill form and click submit button', async () => {
     const router = createTestRouter()
-    server.use(['POST', '/api/users'])
+    server.use(['POST', '/users'])
     const { getByRole, getByPlaceholderText } = render(Register, renderOptions({
       router,
     }))
@@ -19,7 +19,7 @@ describe('# Register form', () => {
 
     await fireEvent.click(getByRole('button', { name: 'Sign up' }))
 
-    const mockedRequest = await server.waitForRequest('POST', '/api/users')
+    const mockedRequest = await server.waitForRequest('POST', '/users')
 
     expect(router.currentRoute.value.path).toBe('/')
     expect(await mockedRequest.json()).toMatchInlineSnapshot(`
@@ -34,7 +34,7 @@ describe('# Register form', () => {
   })
 
   it('should display error message when api returned some errors', async () => {
-    server.use(['POST', '/api/users', 400, {
+    server.use(['POST', '/users', 400, {
       errors: {
         email: ['is invalid'],
         username: ['is already taken'],
@@ -48,7 +48,7 @@ describe('# Register form', () => {
 
     await fireEvent.click(getByRole('button', { name: 'Sign up' }))
 
-    await server.waitForRequest('POST', '/api/users')
+    await server.waitForRequest('POST', '/users')
 
     expect(container).toHaveTextContent('email is invalid')
     expect(container).toHaveTextContent('username is already taken')

@@ -6,16 +6,16 @@ import ArticleDetail from './ArticleDetail.vue'
 
 describe('# ArticleDetail', () => {
   const server = setupMockServer(
-    ['/api/articles/markdown', { article: { ...fixtures.article, body: fixtures.markdown } }],
-    ['/api/articles/markdown-cn', { article: { ...fixtures.article, body: fixtures.markdownCN } }],
-    ['/api/articles/markdown-xss', { article: { ...fixtures.article, body: fixtures.markdownXss } }],
+    ['/articles/markdown', { article: { ...fixtures.article, body: fixtures.markdown } }],
+    ['/articles/markdown-cn', { article: { ...fixtures.article, body: fixtures.markdownCN } }],
+    ['/articles/markdown-xss', { article: { ...fixtures.article, body: fixtures.markdownXss } }],
   )
 
   it('should render markdown body correctly', async () => {
     const { container } = render(asyncWrapper(ArticleDetail), await renderOptions({
       initialRoute: { name: 'article', params: { slug: 'markdown' } },
     }))
-    await server.waitForRequest('GET', '/api/articles/markdown')
+    await server.waitForRequest('GET', '/articles/markdown')
 
     expect(container.querySelector('#article-content')).toMatchSnapshot()
   })
@@ -24,7 +24,7 @@ describe('# ArticleDetail', () => {
     const { container } = render(asyncWrapper(ArticleDetail), await renderOptions({
       initialRoute: { name: 'article', params: { slug: 'markdown-cn' } },
     }))
-    await server.waitForRequest('GET', '/api/articles/markdown-cn')
+    await server.waitForRequest('GET', '/articles/markdown-cn')
 
     expect(container.querySelector('#article-content')).toMatchSnapshot()
   })
@@ -33,7 +33,7 @@ describe('# ArticleDetail', () => {
     const { container } = render(asyncWrapper(ArticleDetail), await renderOptions({
       initialRoute: { name: 'article', params: { slug: 'markdown-xss' } },
     }))
-    await server.waitForRequest('GET', '/api/articles/markdown-xss')
+    await server.waitForRequest('GET', '/articles/markdown-xss')
 
     expect(container.querySelector('#article-content')).toMatchSnapshot()
   })

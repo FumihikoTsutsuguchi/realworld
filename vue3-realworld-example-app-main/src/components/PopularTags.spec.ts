@@ -5,13 +5,13 @@ import { asyncWrapper, renderOptions, setupMockServer } from 'src/utils/test/tes
 
 describe('# PopularTags', () => {
   const server = setupMockServer(
-    ['GET', '/api/tags', { tags: ['tag1', 'tag2'] }],
+    ['GET', '/tags', { tags: ['tag1', 'tag2'] }],
   )
 
   it('should render correctly', async () => {
     const { getAllByRole } = render(asyncWrapper(PopularTags), renderOptions())
 
-    await server.waitForRequest('GET', '/api/tags')
+    await server.waitForRequest('GET', '/tags')
 
     expect(getAllByRole('link')).toHaveLength(2)
     expect(getAllByRole('link')[0]).toHaveTextContent('tag1')

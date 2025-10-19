@@ -46,7 +46,7 @@ describe('# ArticleDetailMeta', () => {
   })
 
   it('should call delete article service when click delete button', async () => {
-    server.use(['DELETE', '/api/articles/*'])
+    server.use(['DELETE', '/articles/*'])
     const { getByRole } = render(ArticleDetailMeta, renderOptions({
       initialState: { user: { user: fixtures.user } },
       props: { article: fixtures.article },
@@ -54,12 +54,12 @@ describe('# ArticleDetailMeta', () => {
 
     await fireEvent.click(getByRole('button', { name: deleteButton }))
 
-    await server.waitForRequest('DELETE', '/api/articles/*')
+    await server.waitForRequest('DELETE', '/articles/*')
   })
 
   it('should call follow service when click follow button', async () => {
     const newProfile: Profile = { ...fixtures.user, following: true }
-    server.use(['POST', '/api/profiles/*/follow', { profile: newProfile }])
+    server.use(['POST', '/profiles/*/follow', { profile: newProfile }])
     const onUpdate = vi.fn()
     const { getByRole } = render(ArticleDetailMeta, renderOptions({
       initialState: { user: { user: { ...fixtures.user, username: 'user2' } } },
@@ -68,13 +68,13 @@ describe('# ArticleDetailMeta', () => {
 
     await fireEvent.click(getByRole('button', { name: followButton }))
 
-    await server.waitForRequest('POST', '/api/profiles/*/follow')
+    await server.waitForRequest('POST', '/profiles/*/follow')
     expect(onUpdate).toHaveBeenCalledWith({ ...fixtures.article, author: newProfile })
   })
 
   it('should call unfollow service when click follow button and not followed author', async () => {
     const newProfile: Profile = { ...fixtures.user, following: false }
-    server.use(['DELETE', '/api/profiles/*/follow', { profile: newProfile }])
+    server.use(['DELETE', '/profiles/*/follow', { profile: newProfile }])
     const onUpdate = vi.fn()
     const { getByRole } = render(ArticleDetailMeta, renderOptions({
       initialState: { user: { user: { ...fixtures.user, username: 'user2' } } },
@@ -86,13 +86,13 @@ describe('# ArticleDetailMeta', () => {
 
     await fireEvent.click(getByRole('button', { name: unfollowButton }))
 
-    await server.waitForRequest('DELETE', '/api/profiles/*/follow')
+    await server.waitForRequest('DELETE', '/profiles/*/follow')
 
     expect(onUpdate).toHaveBeenCalledWith({ ...fixtures.article, author: newProfile })
   })
 
   it('should call favorite article service when click favorite button', async () => {
-    server.use(['POST', '/api/articles/*/favorite', { article: { ...fixtures.article, favorited: true } }])
+    server.use(['POST', '/articles/*/favorite', { article: { ...fixtures.article, favorited: true } }])
     const { getByRole } = render(ArticleDetailMeta, renderOptions({
       initialState: { user: { user: { ...fixtures.user, username: 'user2' } } },
       props: { article: { ...fixtures.article, favorited: false } },
@@ -100,11 +100,11 @@ describe('# ArticleDetailMeta', () => {
 
     await fireEvent.click(getByRole('button', { name: favoriteButton }))
 
-    await server.waitForRequest('POST', '/api/articles/*/favorite')
+    await server.waitForRequest('POST', '/articles/*/favorite')
   })
 
   it('should call favorite article service when click unfavorite button', async () => {
-    server.use(['DELETE', '/api/articles/*/favorite', { article: { ...fixtures.article, favorited: false } }])
+    server.use(['DELETE', '/articles/*/favorite', { article: { ...fixtures.article, favorited: false } }])
     const { getByRole } = render(ArticleDetailMeta, renderOptions({
       initialState: { user: { user: { ...fixtures.user, username: 'user2' } } },
       props: { article: { ...fixtures.article, favorited: true } },
@@ -112,6 +112,6 @@ describe('# ArticleDetailMeta', () => {
 
     await fireEvent.click(getByRole('button', { name: unfavoriteButton }))
 
-    await server.waitForRequest('DELETE', '/api/articles/*/favorite')
+    await server.waitForRequest('DELETE', '/articles/*/favorite')
   })
 })

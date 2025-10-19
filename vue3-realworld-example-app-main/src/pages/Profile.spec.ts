@@ -7,8 +7,8 @@ import { asyncWrapper, createTestRouter, flushPromises, renderOptions, setupMock
 
 describe('# Profile page', () => {
   const server = setupMockServer(
-    ['GET', '/api/profiles/*', { profile: fixtures.user }],
-    ['GET', '/api/articles', { articles: [fixtures.article], articlesCount: 1 }],
+    ['GET', '/profiles/*', { profile: fixtures.user }],
+    ['GET', '/articles', { articles: [fixtures.article], articlesCount: 1 }],
   )
 
   it('should display user info', async () => {
@@ -40,7 +40,7 @@ describe('# Profile page', () => {
   })
 
   it('should jump to login page when click follow user', async () => {
-    server.use(['POST', '/api/profiles/*/follow', { profile: fixtures.user }])
+    server.use(['POST', '/profiles/*/follow', { profile: fixtures.user }])
     vi.spyOn(router, 'push')
     const { getByRole } = render(asyncWrapper(Profile), await renderOptions({
       router,
@@ -52,6 +52,6 @@ describe('# Profile page', () => {
 
     await fireEvent.click(getByRole('button', { name: 'Follow mutoe' }))
 
-    await server.waitForRequest('POST', '/api/profiles/*/follow')
+    await server.waitForRequest('POST', '/profiles/*/follow')
   })
 })

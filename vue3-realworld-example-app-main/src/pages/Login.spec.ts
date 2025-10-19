@@ -10,7 +10,7 @@ describe('# Login page', () => {
 
   it('should call login api when fill form and click submit button', async () => {
     const router = createTestRouter()
-    server.use(['POST', '/api/users/login', { user: fixtures.user }])
+    server.use(['POST', '/users/login', { user: fixtures.user }])
     const { getByRole, getByPlaceholderText } = render(Login, renderOptions({
       router,
     }))
@@ -21,7 +21,7 @@ describe('# Login page', () => {
 
     await fireEvent.click(getByRole('button', { name: 'Sign in' }))
 
-    const mockedRequest = await server.waitForRequest('POST', '/api/users/login')
+    const mockedRequest = await server.waitForRequest('POST', '/users/login')
 
     expect(router.currentRoute.value.path).toBe('/')
     expect(store.updateUser).toHaveBeenCalledWith(fixtures.user)
@@ -36,7 +36,7 @@ describe('# Login page', () => {
   })
 
   it('should display error message when api returned some errors', async () => {
-    server.use(['POST', '/api/users/login', 400, { errors: { password: ['is invalid'] } }])
+    server.use(['POST', '/users/login', 400, { errors: { password: ['is invalid'] } }])
     const { container, getByRole, getByPlaceholderText } = render(Login, renderOptions())
 
     await fireEvent.update(getByPlaceholderText('Email'), 'email@email.com')
@@ -44,7 +44,7 @@ describe('# Login page', () => {
 
     await fireEvent.click(getByRole('button', { name: 'Sign in' }))
 
-    await server.waitForRequest('POST', '/api/users/login')
+    await server.waitForRequest('POST', '/users/login')
 
     expect(container).toHaveTextContent('password is invalid')
   })

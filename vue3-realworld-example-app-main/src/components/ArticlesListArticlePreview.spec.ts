@@ -10,13 +10,13 @@ describe('# ArticlesListArticlePreview', () => {
   const server = setupMockServer()
 
   it('should call favorite method when click favorite button', async () => {
-    server.use(['POST', '/api/articles/*/favorite', { article: { ...fixtures.article, favorited: true } }])
+    server.use(['POST', '/articles/*/favorite', { article: { ...fixtures.article, favorited: true } }])
     const { getByRole } = render(ArticlesListArticlePreview, renderOptions({
       props: { article: fixtures.article },
     }))
 
     await fireEvent.click(getByRole('button', { name: favoriteButton }))
 
-    await server.waitForRequest('POST', '/api/articles/*/favorite')
+    await server.waitForRequest('POST', '/articles/*/favorite')
   })
 })

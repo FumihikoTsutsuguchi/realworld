@@ -6,8 +6,8 @@ import Article from './Article.vue'
 
 describe('# Article', () => {
   const server = setupMockServer(
-    ['GET', '/api/articles/foo', { article: fixtures.article }],
-    ['GET', '/api/articles/foo/comments', { comments: fixtures.articleComments }],
+    ['GET', '/articles/foo', { article: fixtures.article }],
+    ['GET', '/articles/foo/comments', { comments: fixtures.articleComments }],
   )
 
   it('should render correctly', async () => {
@@ -18,7 +18,7 @@ describe('# Article', () => {
     expect(container).toHaveTextContent('Article is downloading')
     expect(container).toHaveTextContent('Comments are downloading')
 
-    await server.waitForRequest('GET', '/api/articles/foo')
+    await server.waitForRequest('GET', '/articles/foo')
 
     expect(container).toHaveTextContent(fixtures.article.title)
     expect(container).toHaveTextContent('Article body')
